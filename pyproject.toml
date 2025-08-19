@@ -1,0 +1,11 @@
+[project]
+name = "weatheragent-tutorial"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "google-adk>=1.11.0",
+    "litellm>=1.75.8",
+    "pyyaml>=6.0.2",
+]
