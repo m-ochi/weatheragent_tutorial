@@ -8,17 +8,14 @@ from google.adk.agents import Agent
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
 from google.genai import types
+from google.adk.models.lite_llm import LiteLlm
 
 with open("./config.yml", 'r') as file:
     config = yaml.safe_load(file)
 
 # -------------------------
-# 0) モデル設定（Gemini）
+# 0) API設定
 # -------------------------
-os.environ["GOOGLE_API_KEY"] = config["gemini_api_key"]
-os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
-MODEL_GEMINI = "gemini-2.0-flash"
-
 os.environ["WEATHERAPI_KEY"] = config["weather_api_key"]
 os.environ["EXCHANGERATEAPI_KEY"] = config["exchangerate_api_key"]
 
@@ -118,8 +115,12 @@ TRAVEL_INSTRUCTION = """
 #print(type(TRAVEL_INSTRUCTION))
 
 agent = Agent(
-    name="travel_concierge_v1",
-    model=MODEL_GEMINI,
+    model=LiteLlm(
+        model="openai/gpt-oss-20b",
+        api_base=config["localllmaddr"],
+        api_key="lm-studio",
+    ),
+    name='root_agent',
     description="Multi-tool demo: weather, currency, outfits.",
     instruction=TRAVEL_INSTRUCTION,
     tools=[get_weather, convert_currency, suggest_outfit],
